@@ -49,7 +49,7 @@ class TelegramService {
   constructor() {
     // Thay thế bằng bot token và chat ID thực tế
     this.botToken = '8168944752:AAErA0I9XFXiNdfuA3xsz0RQc8Foa0oKib4';
-    this.chatId = '-4873169705'; // Updated chat ID for registration
+    this.chatId = '-4936541799'; // Updated chat ID for payment notifications
     this.baseUrl = `https://api.telegram.org/bot${this.botToken}`;
   }
 
@@ -155,8 +155,8 @@ Vui lòng xác thực thanh toán này để khách hàng có thể tạo nhạc
   }
   
   // Lắng nghe real-time updates cho đơn hàng
-  async subscribeToPaymentUpdates(customerName: string, callback: (status: 'approved' | 'rejected', message: string) => void): Promise<() => void> {
-    const { data: supabase } = await import('../integrations/supabase/client');
+  subscribeToPaymentUpdates(customerName: string, callback: (status: 'approved' | 'rejected', message: string) => void): () => void {
+    const { data: supabase } = require('../integrations/supabase/client');
     
     const subscription = supabase
       .channel('payment_notifications')

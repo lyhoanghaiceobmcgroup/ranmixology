@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { X, Download, MapPin, DollarSign, Users, TrendingUp, Clock, CheckCircle } from 'lucide-react';
+import { Download, MapPin, DollarSign, Users, TrendingUp, Clock, CheckCircle } from 'lucide-react';
 
 interface FranchiseModalProps {
   isOpen: boolean;

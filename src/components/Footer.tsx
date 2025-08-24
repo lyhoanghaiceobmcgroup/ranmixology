@@ -37,7 +37,7 @@ const Footer = () => {
                 <MapPin className="w-4 h-4 mr-2 mt-0.5 text-primary flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm md:text-base">RAN Bitro</p>
-                  <p className="text-xs md:text-sm">35 Nguyễn Bỉnh Khiêm, Hà Nội</p>
+                  <p className="text-xs md:text-sm">40 Ngô Quyền, Hà Nội</p>
                 </div>
               </li>
             </ul>

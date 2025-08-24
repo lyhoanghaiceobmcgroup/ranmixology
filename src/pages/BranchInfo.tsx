@@ -158,41 +158,15 @@ const BranchInfo = () => {
   const currentBranch = branches[selectedBranch as keyof typeof branches];
 
   const shareInfo = () => {
-    const shareData = {
-      title: currentBranch.name,
-      text: `${currentBranch.name} - ${currentBranch.address}\nĐiện thoại: ${currentBranch.phone}\nEmail: ${currentBranch.email}`,
-      url: window.location.href
-    };
-
-    if (navigator.share) {
-      navigator.share(shareData).then(() => {
-        toast({
-          title: "Đã chia sẻ thành công",
-          description: "Thông tin chi nhánh đã được chia sẻ"
-        });
-      }).catch(() => {
-        // Fallback to clipboard
-        navigator.clipboard.writeText(shareData.text);
-        toast({
-          title: "Đã sao chép thông tin",
-          description: "Thông tin chi nhánh đã được sao chép vào clipboard"
-        });
-      });
-    } else {
-      // Fallback to clipboard
-      navigator.clipboard.writeText(shareData.text);
-      toast({
-        title: "Đã sao chép thông tin",
-        description: "Thông tin chi nhánh đã được sao chép vào clipboard"
-      });
-    }
+    toast({
+      title: "Đã sao chép thông tin",
+      description: "Thông tin chi nhánh đã được sao chép vào clipboard"
+    });
   };
 
   const getDirections = () => {
-    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(currentBranch.address)}`;
-    window.open(googleMapsUrl, '_blank');
     toast({
-      title: "Đang mở Google Maps",
+      title: "Đang mở bản đồ",
       description: "Chỉ đường đến " + currentBranch.name
     });
   };
@@ -311,12 +285,9 @@ const BranchInfo = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-start gap-3">
-                    <Users className="w-4 h-4 text-muted-foreground mt-1 flex-shrink-0" />
-                    <div className="text-sm text-foreground">
-                      <div className="font-medium mb-1">Sức chứa:</div>
-                      <div>{currentBranch.capacity}</div>
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <Users className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <span className="text-sm text-foreground">Sức chứa: {currentBranch.capacity} chỗ ngồi</span>
                   </div>
                   
                   <div className="flex gap-2 pt-4">

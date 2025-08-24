@@ -11,10 +11,8 @@ import Events from "./pages/Events";
 import Locations from "./pages/Locations";
 import Franchise from "./pages/Franchise";
 import Contact from "./pages/Contact";
-import Playlist from "./pages/Playlist";
-import AIMusicDemo from "./pages/AIMusicDemo";
+
 import BranchInfo from "./pages/BranchInfo";
-import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,10 +31,8 @@ const App = () => (
           <Route path="/locations" element={<Locations />} />
           <Route path="/franchise" element={<Franchise />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/playlist" element={<Playlist />} />
-          <Route path="/ai-music-demo" element={<AIMusicDemo />} />
+
           <Route path="/branch-info" element={<BranchInfo />} />
-          <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

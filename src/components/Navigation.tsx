@@ -1,15 +1,32 @@
-import { useState } from "react";
-import { Menu, X, Coffee, Music, MapPin, Phone } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, Coffee, Music, MapPin, Phone, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Link, useLocation } from "react-router-dom";
 import MusicPaymentModal from "./MusicPaymentModal";
 import QuickBookingModal from "./QuickBookingModal";
+import CartModal from "./CartModal";
+import { cartService } from "@/services/cartService";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMusicModalOpen, setIsMusicModalOpen] = useState(false);
   const [isQuickBookingModalOpen, setIsQuickBookingModalOpen] = useState(false);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const [cartItemsCount, setCartItemsCount] = useState(0);
   const location = useLocation();
+
+  useEffect(() => {
+    const updateCartCount = () => {
+      const state = cartService.getCart();
+      const totalItems = state.items.reduce((sum, item) => sum + item.quantity, 0);
+      setCartItemsCount(totalItems);
+    };
+
+    updateCartCount();
+    const unsubscribe = cartService.subscribe(updateCartCount);
+    return unsubscribe;
+  }, []);
 
   const menuItems = [
     { name: "Trang chủ", href: "/" },
@@ -70,6 +87,20 @@ const Navigation = () => {
               Đặt bàn
             </Button>
             <Button 
+              variant="outline" 
+              size="sm" 
+              className="hover:shadow-glow relative"
+              onClick={() => setIsCartModalOpen(true)}
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Giỏ hàng
+              {cartItemsCount > 0 && (
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-red-500 text-white">
+                  {cartItemsCount}
+                </Badge>
+              )}
+            </Button>
+            <Button 
               variant="default" 
               size="sm" 
               className="bg-gradient-accent text-primary-foreground hover:shadow-glow"
@@ -120,6 +151,22 @@ const Navigation = () => {
                   Đặt bàn
                 </Button>
                 <Button 
+                  variant="outline" 
+                  className="w-full relative"
+                  onClick={() => {
+                    setIsCartModalOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  Giỏ hàng
+                  {cartItemsCount > 0 && (
+                    <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-red-500 text-white">
+                      {cartItemsCount}
+                    </Badge>
+                  )}
+                </Button>
+                <Button 
                   variant="default" 
                   className="w-full bg-gradient-accent"
                   onClick={() => setIsMusicModalOpen(true)}
@@ -140,6 +187,10 @@ const Navigation = () => {
       <QuickBookingModal 
         isOpen={isQuickBookingModalOpen} 
         onClose={() => setIsQuickBookingModalOpen(false)} 
+      />
+      <CartModal 
+        isOpen={isCartModalOpen} 
+        onClose={() => setIsCartModalOpen(false)} 
       />
     </nav>
   );

@@ -2,18 +2,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Coffee, Leaf, Sparkles, Brain, Heart, Zap, Moon, MapPin, Music2, Camera, Star } from "lucide-react";
+import { Coffee, Leaf, Sparkles, Brain, Heart, Zap, Moon, MapPin, Music2, Camera, Star, ShoppingCart } from "lucide-react";
 import drinksImage from "@/assets/drinks-collection.jpg";
 import MusicGenerationModal from "./MusicGenerationModal";
+import CartModal from "./CartModal";
+import { cartService } from "@/services/cartService";
+import { useToast } from "@/hooks/use-toast";
 const MenuSection = () => {
   const [activeCategory, setActiveCategory] = useState("tea");
   const [selectedMood, setSelectedMood] = useState("");
   const [selectedBranch, setSelectedBranch] = useState("");
   const [musicModalOpen, setMusicModalOpen] = useState(false);
+  const [cartModalOpen, setCartModalOpen] = useState(false);
   const [selectedDrink, setSelectedDrink] = useState<{
     name: string;
     mood: string[];
   } | null>(null);
+  const { toast } = useToast();
   const categories = [{
     id: "tea",
     name: "Trà thủ công",
@@ -261,6 +266,27 @@ const MenuSection = () => {
     });
     setMusicModalOpen(true);
   };
+
+  const addToCart = (item: any) => {
+    const cartItem = {
+      name: item.name,
+      description: item.description,
+      price: item.price,
+      priceNumber: cartService.parsePriceString(item.price),
+      category: activeCategory,
+      mood: item.mood,
+      branch: item.branch,
+      specialty: item.specialty,
+      image: item.image,
+      ingredients: item.ingredients
+    };
+    
+    cartService.addItem(cartItem);
+    toast({
+      title: "Đã thêm vào giỏ hàng",
+      description: `${item.name} đã được thêm vào giỏ hàng`,
+    });
+  };
   return <section id="menu" className="py-12 md:py-20 bg-card/20">
       <div className="container mx-auto px-4">
         {/* Section Header */}
@@ -390,8 +416,11 @@ const MenuSection = () => {
                   </div>
                 )}
                 
-                <Button className="w-full bg-gradient-accent text-primary-foreground hover:shadow-glow font-inter font-semibold text-sm">
-                  <Camera className="w-3 h-3 md:w-4 md:h-4 mr-2" />
+                <Button 
+                  className="w-full bg-gradient-accent text-primary-foreground hover:shadow-glow font-inter font-semibold text-sm"
+                  onClick={() => addToCart(item)}
+                >
+                  <ShoppingCart className="w-3 h-3 md:w-4 md:h-4 mr-2" />
                   Thêm vào giỏ
                 </Button>
               </CardContent>
@@ -406,6 +435,9 @@ const MenuSection = () => {
 
         {/* Music Generation Modal */}
         {selectedDrink && <MusicGenerationModal isOpen={musicModalOpen} onClose={() => setMusicModalOpen(false)} drinkName={selectedDrink.name} mood={selectedDrink.mood} />}
+        
+        {/* Cart Modal */}
+        <CartModal isOpen={cartModalOpen} onClose={() => setCartModalOpen(false)} />
       </div>
     </section>;
 };

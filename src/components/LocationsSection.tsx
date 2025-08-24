@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +9,6 @@ const LocationsSection = () => {
   const [selectedLocation, setSelectedLocation] = useState("nguyen-binh-khiem");
   const [isQuickBookingModalOpen, setIsQuickBookingModalOpen] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   // Function to calculate distance between two coordinates
   const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
@@ -316,15 +314,15 @@ const LocationsSection = () => {
                         <MapPin className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                         Đặt bàn ngay
                       </Button>
-                      <Button variant="outline" className="text-xs md:text-sm hover:shadow-elegant" onClick={() => navigate('/playlist')}>
+                      <Button variant="outline" className="text-xs md:text-sm hover:shadow-elegant">
                         <Music className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                         Nghe playlist
                       </Button>
-                      <Button variant="outline" className="text-xs md:text-sm hover:shadow-elegant" onClick={() => navigate('/ai-music-demo')}>
+                      <Button variant="outline" className="text-xs md:text-sm hover:shadow-elegant">
                         <Sparkles className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                         Demo AI Music
                       </Button>
-                      <Button variant="outline" className="text-xs md:text-sm hover:shadow-elegant" onClick={() => navigate('/branch-info')}>
+                      <Button variant="outline" className="text-xs md:text-sm hover:shadow-elegant" onClick={() => window.open(currentLocation.branchUrl, '_blank')}>
                         <ExternalLink className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                         Thông tin chi nhánh
                       </Button>

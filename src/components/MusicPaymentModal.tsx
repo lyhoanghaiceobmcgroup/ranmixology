@@ -129,7 +129,7 @@ const MusicPaymentModal = ({ isOpen, onClose }: MusicPaymentModalProps) => {
       });
       
       // Lắng nghe real-time updates
-      const unsubscribe = await telegramService.subscribeToPaymentUpdates(
+      const unsubscribe = telegramService.subscribeToPaymentUpdates(
         payment.customerName,
         (status: 'approved' | 'rejected', message: string) => {
           if (status === 'approved') {
