@@ -53,8 +53,29 @@ class TelegramService {
     this.baseUrl = `https://api.telegram.org/bot${this.botToken}`;
   }
 
-  async sendPaymentVerification(paymentInfo: PaymentInfo, billImage?: File): Promise<boolean> {
+  async sendPaymentVerification(paymentInfo: PaymentInfo, billImage?: File): Promise<{success: boolean, orderId?: string}> {
     try {
+      const timestamp = Date.now();
+      const orderId = `order_${timestamp}_${paymentInfo.customerName}`;
+      
+      // Tạo đơn hàng trong database
+      const { data: supabase } = await import('../integrations/supabase/client');
+      const { error: insertError } = await supabase
+        .from('payment_orders')
+        .insert({
+          id: orderId,
+          customer_name: paymentInfo.customerName,
+          email: paymentInfo.email,
+          phone: paymentInfo.phone,
+          amount: paymentInfo.amount,
+          status: 'pending'
+        });
+        
+      if (insertError) {
+        console.error('Error creating payment order:', insertError);
+        return { success: false };
+      }
+      
       const message: TelegramMessage = {
         chat_id: this.chatId,
         text: `🎵 RAN MIXOLOGY - Yêu cầu xác thực thanh toán
@@ -62,7 +83,9 @@ class TelegramService {
 👤 Tài khoản: ${paymentInfo.customerName}
 💰 Số tiền: ${paymentInfo.amount.toLocaleString('vi-VN')} VND
 📱 Số điện thoại: ${paymentInfo.phone}
-⏰ Thời gian cập nhật: ${new Date().toLocaleString('vi-VN')}
+📧 Email: ${paymentInfo.email}
+🆔 Mã đơn: ${orderId}
+⏰ Thời gian: ${new Date().toLocaleString('vi-VN')}
 
 Vui lòng xác thực thanh toán này để khách hàng có thể tạo nhạc AI.`,
         reply_markup: {
@@ -70,11 +93,11 @@ Vui lòng xác thực thanh toán này để khách hàng có thể tạo nhạc
             [
               {
                 text: "✅ Xác nhận thanh toán",
-                callback_data: `approve_${Date.now()}_${paymentInfo.customerName}`
+                callback_data: `approve_${timestamp}_${paymentInfo.customerName}`
               },
               {
                 text: "❌ Từ chối thanh toán", 
-                callback_data: `reject_${Date.now()}_${paymentInfo.customerName}`
+                callback_data: `reject_${timestamp}_${paymentInfo.customerName}`
               }
             ]
           ]
@@ -90,10 +113,10 @@ Vui lòng xác thực thanh toán này để khách hàng có thể tạo nhạc
       });
 
       const result = await response.json();
-      return result.ok;
+      return { success: result.ok, orderId: result.ok ? orderId : undefined };
     } catch (error) {
       console.error('Error sending Telegram message:', error);
-      return false;
+      return { success: false };
     }
   }
 
@@ -109,39 +132,54 @@ Vui lòng xác thực thanh toán này để khách hàng có thể tạo nhạc
     });
   }
 
-  // Method to check payment status (would be implemented with webhook in production)
-  async checkPaymentStatus(customerName: string): Promise<'pending' | 'approved' | 'rejected'> {
+  // Kiểm tra trạng thái đơn hàng thông qua database
+  async checkPaymentStatus(orderId: string): Promise<'pending' | 'approved' | 'rejected'> {
     try {
-      // Kiểm tra trạng thái thanh toán thông qua webhook hoặc polling
-      // Trong thực tế, bạn có thể lưu trạng thái vào database và check từ đó
-      const response = await fetch(`${this.baseUrl}/getUpdates`, {
-        method: 'GET'
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        // Tìm callback data phù hợp với customerName
-        const updates = data.result || [];
+      const { data: supabase } = await import('../integrations/supabase/client');
+      const { data: order, error } = await supabase
+        .from('payment_orders')
+        .select('status')
+        .eq('id', orderId)
+        .single();
         
-        for (const update of updates.reverse()) {
-          if (update.callback_query && update.callback_query.data) {
-            const callbackData = update.callback_query.data;
-            if (callbackData.includes(customerName)) {
-              if (callbackData.startsWith('approve_')) {
-                return 'approved';
-              } else if (callbackData.startsWith('reject_')) {
-                return 'rejected';
-              }
-            }
-          }
-        }
+      if (error) {
+        console.error('Error checking payment status:', error);
+        return 'pending';
       }
       
-      return 'pending';
+      return order?.status || 'pending';
     } catch (error) {
       console.error('Error checking payment status:', error);
       return 'pending';
     }
+  }
+  
+  // Lắng nghe real-time updates cho đơn hàng
+  async subscribeToPaymentUpdates(customerName: string, callback: (status: 'approved' | 'rejected', message: string) => void): Promise<() => void> {
+    const { data: supabase } = await import('../integrations/supabase/client');
+    
+    const subscription = supabase
+      .channel('payment_notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'payment_notifications',
+          filter: `customer_name=eq.${customerName}`
+        },
+        (payload: any) => {
+          console.log('Received payment notification:', payload);
+          const { status, message } = payload.new;
+          callback(status, message);
+        }
+      )
+      .subscribe();
+      
+    // Return unsubscribe function
+    return () => {
+      supabase.removeChannel(subscription);
+    };
   }
 
   // Setup webhook (for production use)

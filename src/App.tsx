@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import Playlist from "./pages/Playlist";
 import AIMusicDemo from "./pages/AIMusicDemo";
 import BranchInfo from "./pages/BranchInfo";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/playlist" element={<Playlist />} />
           <Route path="/ai-music-demo" element={<AIMusicDemo />} />
           <Route path="/branch-info" element={<BranchInfo />} />
+          <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

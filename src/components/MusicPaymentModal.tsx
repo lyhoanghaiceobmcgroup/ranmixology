@@ -111,7 +111,7 @@ const MusicPaymentModal = ({ isOpen, onClose }: MusicPaymentModalProps) => {
     }
 
     const payment: PaymentInfo = {
-      customerName: paymentInfo.accountName,
+      customerName: `Customer_${Date.now()}`,
       email: "customer@example.com",
       phone: "0123456789",
       amount: 50000, // 50,000 VNĐ
@@ -119,33 +119,49 @@ const MusicPaymentModal = ({ isOpen, onClose }: MusicPaymentModalProps) => {
       timestamp: new Date().toLocaleString('vi-VN'),
     };
 
-    const success = await telegramService.sendPaymentVerification(payment, billImage);
+    const result = await telegramService.sendPaymentVerification(payment, billImage);
     
-    if (success) {
+    if (result.success && result.orderId) {
       setCurrentStep('verification');
       toast({
         title: "Đã gửi yêu cầu",
         description: "Bill thanh toán đã được gửi để xác thực. Vui lòng chờ trong 5 phút.",
       });
       
-      // Simulate approval process
-      setTimeout(async () => {
-        const approved = await telegramService.simulateApproval();
-        if (approved) {
-          setCurrentStep('prompt');
+      // Lắng nghe real-time updates
+      const unsubscribe = await telegramService.subscribeToPaymentUpdates(
+        payment.customerName,
+        (status: 'approved' | 'rejected', message: string) => {
+          if (status === 'approved') {
+            setCurrentStep('prompt');
+            toast({
+              title: "Thanh toán đã được duyệt!",
+              description: message,
+            });
+          } else {
+            toast({
+              title: "Thanh toán bị từ chối",
+              description: message,
+              variant: "destructive",
+            });
+            setCurrentStep('payment');
+          }
+          unsubscribe();
+        }
+      );
+      
+      // Cleanup subscription khi component unmount hoặc timeout
+      setTimeout(() => {
+        unsubscribe();
+        if (currentStep === 'verification') {
+          setCurrentStep('payment');
           toast({
-            title: "Thanh toán đã được duyệt!",
-            description: "Bạn có thể bắt đầu tạo nhạc AI ngay bây giờ.",
-          });
-        } else {
-          toast({
-            title: "Thanh toán bị từ chối",
-            description: "Vui lòng kiểm tra lại thông tin thanh toán.",
+            title: "Hết thời gian",
+            description: "Vui lòng thực hiện lại thanh toán",
             variant: "destructive",
           });
-          setCurrentStep('payment');
         }
-      }, 10000); // 10 seconds for demo
+      }, 300000); // 5 minutes timeout
     } else {
       toast({
         title: "Lỗi gửi yêu cầu",
