@@ -6,7 +6,7 @@ import { Coffee, Leaf, Sparkles, Brain, Heart, Zap, Moon, MapPin, Music2, Camera
 import drinksImage from "@/assets/drinks-collection.jpg";
 import MusicGenerationModal from "./MusicGenerationModal";
 import CartModal from "./CartModal";
-import { cartService } from "@/services/cartService";
+import { cartService, CartService } from "@/services/cartService";
 import { useToast } from "@/hooks/use-toast";
 const MenuSection = () => {
   const [activeCategory, setActiveCategory] = useState("tea");
@@ -272,7 +272,7 @@ const MenuSection = () => {
       name: item.name,
       description: item.description,
       price: item.price,
-      priceNumber: cartService.parsePriceString(item.price),
+      priceNumber: CartService.parsePriceString(item.price),
       category: activeCategory,
       mood: item.mood,
       branch: item.branch,

@@ -1,5 +1,5 @@
 
-import { Coffee, Music, Phone, Mail, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube, Coffee, Music } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="col-span-1 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center mb-4">
               <div className="w-10 h-10 bg-gradient-accent rounded-full flex items-center justify-center mr-3">
-                <Coffee className="w-5 h-5 text-primary-foreground" />
+                <img src="/src/assets/logo.svg" alt="RAN Logo" className="w-5 h-5" />
               </div>
               <h3 className="font-playfair text-xl md:text-2xl font-bold text-foreground">RAN MIXOLOGY</h3>
             </div>
@@ -37,7 +37,7 @@ const Footer = () => {
                 <MapPin className="w-4 h-4 mr-2 mt-0.5 text-primary flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm md:text-base">RAN Bitro</p>
-                  <p className="text-xs md:text-sm">40 Ngô Quyền, Hà Nội</p>
+                  <p className="text-xs md:text-sm">35 Nguyễn Bỉnh Khiêm, Hà Nội</p>
                 </div>
               </li>
             </ul>
@@ -48,7 +48,7 @@ const Footer = () => {
             <h4 className="font-playfair font-semibold text-foreground mb-3 md:mb-4">Dịch vụ</h4>
             <ul className="space-y-1.5 md:space-y-2 text-muted-foreground text-sm md:text-base">
               <li className="flex items-center">
-                <Coffee className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
+                <img src="/src/assets/logo.svg" alt="RAN Logo" className="w-4 h-4 mr-2 flex-shrink-0" />
                 <span>Mixology & Coffee</span>
               </li>
               <li className="flex items-center">

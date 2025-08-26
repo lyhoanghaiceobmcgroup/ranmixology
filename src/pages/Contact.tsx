@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Phone, Mail, MapPin, MessageSquare, Facebook, Clock, Send, User, Building2, FileText, Users, Coffee, Mic, Briefcase, Award } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import heroInterior from "@/assets/hero-interior.jpg";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -53,7 +54,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Địa chỉ",
-      content: "35 Nguyễn Bỉnh Khiêm, Hai Bà Trưng, Hà Nội",
+      content: "40 Ngô Quyền, Hà Nội",
       action: "https://maps.google.com"
     },
     {
@@ -94,7 +95,7 @@ const Contact = () => {
   const branches = [
     {
       name: "RAN Coffee - Tea",
-      address: "35 Nguyễn Bỉnh Khiêm, Hà Nội",
+      address: "40 Ngô Quyền, Hà Nội",
       hours: "7:00 - 23:00",
       phone: "056 981 0000"
     },
@@ -115,7 +116,7 @@ const Contact = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1559329007-40df8def862d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')"
+            backgroundImage: `url('${heroInterior}')`
           }}
         />
         <div className="absolute inset-0 bg-gradient-hero opacity-80" />

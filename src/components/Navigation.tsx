@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Coffee, Music, MapPin, Phone, ShoppingCart } from "lucide-react";
+import { Menu, X, Music, MapPin, Phone, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link, useLocation } from "react-router-dom";
@@ -52,7 +52,7 @@ const Navigation = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-hero rounded-lg flex items-center justify-center">
-              <Coffee className="w-6 h-6 text-primary" />
+              <img src="/src/assets/logo.svg" alt="RAN Logo" className="w-6 h-6" />
             </div>
             <div>
               <h1 className="font-playfair text-xl font-bold text-foreground">RAN</h1>
