@@ -1,54 +1,43 @@
-# Welcome to your Lovable project
+# RAN Mixology - Coffee & Bar Website
 
-## Project info
+A modern, responsive website for RAN Mixology coffee and bar chain built with React and TypeScript.
 
-**URL**: https://lovable.dev/projects/ef369be2-c3e7-4e7a-acf1-626763bff8ec
+## 🚀 Getting Started
 
-## How can I edit this code?
+### Prerequisites
 
-There are several ways of editing your application.
+- Node.js (v16 or higher)
+- npm or yarn
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/ef369be2-c3e7-4e7a-acf1-626763bff8ec) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Clone the repository
+git clone https://github.com/lyhoanghaiceobmcgroup/ranmixology.git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd ranmixology
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Development
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The development server will start at `http://localhost:8080/`
 
-**Use GitHub Codespaces**
+### Building for Production
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sh
+# Build the project
+npm run build
+
+# Preview the build
+npm run preview
+```
 
 ## What technologies are used for this project?
 
@@ -60,14 +49,41 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## 🌐 Deployment
 
-Simply open [Lovable](https://lovable.dev/projects/ef369be2-c3e7-4e7a-acf1-626763bff8ec) and click on Share -> Publish.
+### Deploy to Vercel
 
-## Can I connect a custom domain to my Lovable project?
+1. Install Vercel CLI:
+```sh
+npm install -g vercel
+```
 
-Yes, you can!
+2. Login to Vercel:
+```sh
+vercel login
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+3. Deploy:
+```sh
+vercel --prod
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Deploy to Netlify
+
+1. Build the project:
+```sh
+npm run build
+```
+
+2. Deploy the `dist` folder to Netlify
+
+## 🔧 Configuration
+
+The project uses environment variables for configuration. Create a `.env` file in the root directory:
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+VITE_TELEGRAM_CHAT_ID=your_telegram_chat_id
+```
